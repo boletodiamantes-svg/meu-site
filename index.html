@@ -1,0 +1,1681 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Direito em Jogo - Descubra Seus Direitos</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap">
+  <style>
+    :root {
+      --bg: #f3f6f4;
+      --card: #ffffff;
+      --ink: #0f221d;
+      --muted: #4e635d;
+      --line: #c8d7d0;
+      --accent: #0f7a54;
+      --accent-hover: #0c6344;
+      --accent-ink: #ffffff;
+      --alert: #b4530f;
+      --alert-bg: #fbeedd;
+      --font-display: "Archivo", system-ui, -apple-system, sans-serif;
+      --font-body: "Source Sans 3", system-ui, -apple-system, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0b1512;
+        --card: #13231e;
+        --ink: #e8f1ed;
+        --muted: #9db3ab;
+        --line: #27403a;
+        --accent: #2dc389;
+        --accent-hover: #24a875;
+        --accent-ink: #062419;
+        --alert: #f0a566;
+        --alert-bg: #33220f;
+        color-scheme: dark;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0b1512;
+      --card: #13231e;
+      --ink: #e8f1ed;
+      --muted: #9db3ab;
+      --line: #27403a;
+      --accent: #2dc389;
+      --accent-hover: #24a875;
+      --accent-ink: #062419;
+      --alert: #f0a566;
+      --alert-bg: #33220f;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.5;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+      padding-block: 20px 48px;
+    }
+
+    main {
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* Meta, Botão Voltar & Controle de Som */
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .meta-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .meta-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sound-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--card);
+      border: 1.5px solid var(--line);
+      color: var(--muted);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      transition: all .2s ease;
+      user-select: none;
+    }
+
+    .sound-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .sound-toggle.muted {
+      color: #999;
+      opacity: 0.7;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card);
+      border: 1.5px solid var(--line);
+      color: var(--ink);
+      font: inherit;
+      font-size: 13px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 8px 18px;
+      border-radius: 9px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 8%, var(--card));
+      transform: translateX(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .back:active {
+      transform: scale(0.96) translateX(-2px);
+    }
+
+    .back[hidden] {
+      display: none;
+    }
+
+    /* Barra de progresso com cor dinâmica (Vermelho -> Verde) */
+    .bar {
+      height: 10px;
+      background: var(--line);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .bar > i {
+      display: block;
+      height: 100%;
+      background: #ef4444; /* Inicia vermelho */
+      width: 0;
+      border-radius: 99px;
+      transition: width .45s cubic-bezier(0.16, 1, 0.3, 1), background-color .45s ease, box-shadow .45s ease;
+    }
+
+    /* Card principal */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 26px 24px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.05);
+      animation: cardEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+      overflow: hidden;
+    }
+
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Banner de Imagem em cima de cada etapa */
+    .card-img-wrap {
+      width: calc(100% + 48px);
+      margin: -26px -24px 22px -24px;
+      max-height: 240px;
+      background: #0d1a16;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform .5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card-img:hover {
+      transform: scale(1.025);
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 22px 18px;
+      }
+      .card-img-wrap {
+        width: calc(100% + 36px);
+        margin: -22px -18px 18px -18px;
+        max-height: 185px;
+      }
+      .card-img {
+        height: 185px;
+      }
+    }
+
+    .kicker {
+      font-size: 13px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 0 0 10px;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(21px, 5.2vw, 27px);
+      line-height: 1.2;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+      text-wrap: balance;
+    }
+
+    .sub {
+      color: var(--muted);
+      margin: 0 0 20px;
+      font-size: 16px;
+    }
+
+    .q {
+      font-weight: 700;
+      margin: 18px 0 12px;
+      font-size: 17px;
+    }
+
+    /* Destaques da Etapa 1 (Introdução) */
+    .intro-features {
+      display: grid;
+      gap: 12px;
+      margin: 20px 0 24px;
+    }
+
+    .intro-feat {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 16px;
+      background: color-mix(in srgb, var(--accent) 7%, var(--card));
+      border: 1.5px solid color-mix(in srgb, var(--accent) 22%, transparent);
+      border-radius: 12px;
+      font-size: 15.5px;
+      color: var(--ink);
+    }
+
+    .intro-feat span {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .intro-feat b {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .btn-intro {
+      font-size: 17px;
+      padding: 18px 22px;
+      background: linear-gradient(135deg, var(--accent), #15803d);
+      box-shadow: 0 6px 20px rgba(15, 122, 84, 0.4);
+      animation: pulseIntro 2.2s infinite ease-in-out;
+    }
+
+    @keyframes pulseIntro {
+      0%, 100% { transform: scale(1); box-shadow: 0 6px 20px rgba(15, 122, 84, 0.4); }
+      50% { transform: scale(1.025); box-shadow: 0 10px 28px rgba(15, 122, 84, 0.6); }
+    }
+
+    /* Opções do Quiz & Efeitos de Clique */
+    .opts {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .opt {
+      width: 100%;
+      text-align: left;
+      display: flex;
+      gap: 13px;
+      align-items: flex-start;
+      min-width: 0;
+      background: var(--card);
+      color: var(--ink);
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      padding: 16px 16px;
+      font: inherit;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color .18s, background .18s, transform .15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .18s;
+      animation: optSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes optSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .opt:hover {
+      border-color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 6%, var(--card));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .opt:active {
+      transform: scale(0.975);
+    }
+
+    /* Efeito de Onda (Ripple) no Clique */
+    .ripple-wave {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: rippleEffect 0.55s ease-out forwards;
+      background: color-mix(in srgb, var(--accent) 28%, transparent);
+      pointer-events: none;
+    }
+
+    @keyframes rippleEffect {
+      0% {
+        transform: scale(0);
+        opacity: 0.85;
+      }
+      100% {
+        transform: scale(3);
+        opacity: 0;
+      }
+    }
+
+    /* Tag de Letra / Checkbox */
+    .opt .tag {
+      flex: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      border: 1.5px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-top: 1px;
+      transition: all .2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .opt .txt {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      font-size: 16px;
+      line-height: 1.42;
+    }
+
+    /* Estado Selecionado com Efeito de Destaque e Pulso */
+    .opt[aria-pressed="true"], .opt[aria-checked="true"] {
+      border-color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 12%, var(--card));
+      box-shadow: 0 0 0 2px var(--accent), 0 6px 18px color-mix(in srgb, var(--accent) 22%, transparent);
+      animation: optSelectedPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes optSelectedPop {
+      0% { transform: scale(0.97); }
+      55% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    .opt[aria-pressed="true"] .tag, .opt[aria-checked="true"] .tag {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      transform: scale(1.1);
+      box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 50%, transparent);
+      animation: tagPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes tagPop {
+      0% { transform: scale(0.6) rotate(-15deg); }
+      70% { transform: scale(1.25) rotate(5deg); }
+      100% { transform: scale(1.1) rotate(0); }
+    }
+
+    /* Botões */
+    .btn {
+      display: block;
+      width: 100%;
+      margin-top: 24px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      border: 0;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+      box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 32%, transparent);
+      transition: background .2s, transform .2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .2s;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 45%, transparent);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.975);
+    }
+
+    .btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Botão VSL com Feixe de Luz Contínuo */
+    .btn-vsl {
+      margin-top: 26px;
+      font-size: 17px;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, var(--accent), #16a34a);
+      box-shadow: 0 6px 22px rgba(22, 163, 74, 0.45);
+      animation: pulseVsl 2.4s infinite ease-in-out;
+    }
+
+    .btn-vsl::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transform: skewX(-25deg);
+      animation: lightSweep 2.8s infinite ease-in-out;
+    }
+
+    @keyframes lightSweep {
+      0% { left: -120%; }
+      35% { left: 160%; }
+      100% { left: 160%; }
+    }
+
+    @keyframes pulseVsl {
+      0%, 100% { transform: scale(1); box-shadow: 0 6px 22px rgba(22, 163, 74, 0.45); }
+      50% { transform: scale(1.025); box-shadow: 0 10px 30px rgba(22, 163, 74, 0.65); }
+    }
+
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .hint {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin: 12px 0 0;
+      text-align: center;
+    }
+
+    /* EFEITOS ESPECIAIS NAS TELAS DE ANÁLISE */
+    .analysis {
+      margin-top: 22px;
+    }
+
+    .analysis-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .radar-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--accent);
+    }
+
+    .radar-pulse {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radar-ping {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.7;
+      animation: radarPing 1.5s infinite cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    .radar-core {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    @keyframes radarPing {
+      0% { transform: scale(0.6); opacity: 0.9; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    .analysis-counter {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+
+    .track {
+      height: 14px;
+      border-radius: 99px;
+      background: var(--line);
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+    }
+
+    .track > i {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent) 0%, #34d399 50%, #10b981 100%);
+      background-size: 200% 100%;
+      animation: shimmerSweep 1.8s infinite linear;
+      box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 70%, transparent);
+      position: relative;
+    }
+
+    .track > i::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 10px;
+      height: 100%;
+      background: #ffffff;
+      border-radius: 50%;
+      filter: blur(2px);
+      box-shadow: 0 0 8px #ffffff;
+    }
+
+    @keyframes shimmerSweep {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .msg {
+      min-height: 1.6em;
+      margin: 16px 0 0;
+      font-weight: 700;
+      font-size: 16.5px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .msg.msg-fade {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    /* Checklist Animada da Etapa 15 */
+    .checks {
+      list-style: none;
+      margin: 22px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 13px;
+    }
+
+    .checks li {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      opacity: .2;
+      transition: opacity .45s ease, transform .45s cubic-bezier(0.16, 1, 0.3, 1), background .3s;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 11px 15px;
+      border-radius: 12px;
+      background: transparent;
+      border: 1px solid transparent;
+    }
+
+    .checks li.on {
+      opacity: 1;
+      background: color-mix(in srgb, var(--accent) 8%, var(--card));
+      border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+      transform: translateX(4px);
+    }
+
+    .checks .dot {
+      flex: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 800;
+      transition: all .35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .checks li.on .dot {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+      transform: scale(1.15);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+      animation: checkPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes checkPop {
+      0% { transform: scale(0.4); }
+      60% { transform: scale(1.35); }
+      100% { transform: scale(1.15); }
+    }
+
+    /* Relatório Final */
+    .report {
+      display: grid;
+      gap: 15px;
+      margin: 20px 0 0;
+    }
+
+    .report p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .report b {
+      display: block;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .warn {
+      background: var(--alert-bg);
+      border-radius: 12px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--alert);
+      animation: warnGlow 2.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes warnGlow {
+      from { box-shadow: 0 2px 8px rgba(180, 83, 15, 0.08); }
+      to { box-shadow: 0 4px 16px rgba(180, 83, 15, 0.18); }
+    }
+
+    .warn b {
+      color: var(--alert);
+    }
+
+    blockquote {
+      margin: 20px 0 0;
+      padding: 16px 18px;
+      border-left: 4px solid var(--accent);
+      background: color-mix(in srgb, var(--accent) 8%, var(--card));
+      border-radius: 0 12px 12px 0;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    /* Depoimentos Realistas com Entrada em Cascata */
+    .rev-title {
+      font-size: 13px;
+      letter-spacing: .1em;
+      font-weight: 800;
+      color: var(--muted);
+      margin: 30px 0 14px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rev-title::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 14px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .revs {
+      display: grid;
+      gap: 12px;
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .rev {
+      margin: 0;
+      border: 1.5px solid var(--line);
+      border-radius: 13px;
+      padding: 16px 16px;
+      background: var(--card);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      animation: revSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes revSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .rev:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    }
+
+    .rev-header {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 9px;
+    }
+
+    .rev-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      flex-shrink: 0;
+      background: var(--line);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .rev-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .rev-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .rev-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--ink);
+    }
+
+    .rev-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: color-mix(in srgb, var(--accent) 15%, var(--card));
+      color: var(--accent);
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .rev-stars {
+      color: #f59e0b;
+      letter-spacing: 2px;
+      font-size: 13.5px;
+      margin-top: 2px;
+      text-shadow: 0 0 6px rgba(245, 158, 11, 0.35);
+    }
+
+    .rev-quote {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      font-size: 14.5px;
+      line-height: 1.45;
+      color: var(--ink);
+      font-style: italic;
+    }
+
+    /* Selo de Conclusão da Análise na Etapa Final */
+    .analysis-complete-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: color-mix(in srgb, var(--accent) 14%, var(--card));
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 99px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 10px color-mix(in srgb, var(--accent) 25%, transparent);
+      animation: badgePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes badgePop {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<main>
+  <div class="meta">
+    <div class="meta-left">
+      <span class="step-badge" id="step">Etapa 1 de 16</span>
+      <button class="back" id="back" type="button" hidden>← Voltar</button>
+    </div>
+    <div class="meta-right">
+      <button class="sound-toggle" id="sound-btn" type="button" title="Clique para ativar/desativar sons">🔊 Som Ativo</button>
+    </div>
+  </div>
+  <div class="bar" role="progressbar" aria-valuemin="1" aria-valuemax="16" id="pb">
+    <i id="fill"></i>
+  </div>
+  <section class="card" id="card" aria-live="polite"></section>
+</main>
+
+<script>
+(function () {
+  // CONFIGURAÇÃO: Insira aqui o link da sua VSL (Vídeo de Vendas)
+  var VSL_URL = "https://seulinkdavsl.com";
+
+  /* ========================================================
+     SISTEMA DE EFEITOS SONOROS (WEB AUDIO API - 100% NATIVO)
+     ======================================================== */
+  var SoundEngine = (function () {
+    var ctx = null;
+    var enabled = true;
+
+    function init() {
+      if (!ctx) {
+        var AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          ctx = new AudioCtx();
+        }
+      }
+      if (ctx && ctx.state === "suspended") {
+        ctx.resume();
+      }
+      return ctx;
+    }
+
+    window.addEventListener("click", init, { once: false });
+    window.addEventListener("touchstart", init, { once: false });
+
+    function playClick() {
+      if (!enabled) return;
+      try {
+        var c = init();
+        if (!c) return;
+        var now = c.currentTime;
+        var osc = c.createOscillator();
+        var gain = c.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(640, now);
+        osc.frequency.exponentialRampToValueAtTime(200, now + 0.055);
+
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+
+        osc.connect(gain);
+        gain.connect(c.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.055);
+      } catch (e) {}
+    }
+
+    function playCheck() {
+      if (!enabled) return;
+      try {
+        var c = init();
+        if (!c) return;
+        var now = c.currentTime;
+
+        var osc1 = c.createOscillator();
+        var gain1 = c.createGain();
+        osc1.type = "sine";
+        osc1.frequency.setValueAtTime(523.25, now);
+        osc1.frequency.exponentialRampToValueAtTime(659.25, now + 0.07);
+        gain1.gain.setValueAtTime(0.25, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc1.connect(gain1);
+        gain1.connect(c.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.08);
+
+        var osc2 = c.createOscillator();
+        var gain2 = c.createGain();
+        osc2.type = "sine";
+        osc2.frequency.setValueAtTime(783.99, now + 0.03);
+        gain2.gain.setValueAtTime(0.2, now + 0.03);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+        osc2.connect(gain2);
+        gain2.connect(c.destination);
+        osc2.start(now + 0.03);
+        osc2.stop(now + 0.12);
+      } catch (e) {}
+    }
+
+    function playButton() {
+      if (!enabled) return;
+      try {
+        var c = init();
+        if (!c) return;
+        var now = c.currentTime;
+        var osc = c.createOscillator();
+        var gain = c.createGain();
+
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(260, now + 0.08);
+
+        gain.gain.setValueAtTime(0.26, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+        osc.connect(gain);
+        gain.connect(c.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.08);
+      } catch (e) {}
+    }
+
+    function playSonar() {
+      if (!enabled) return;
+      try {
+        var c = init();
+        if (!c) return;
+        var now = c.currentTime;
+        var osc = c.createOscillator();
+        var gain = c.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.exponentialRampToValueAtTime(440, now + 0.08);
+
+        gain.gain.setValueAtTime(0.09, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+        osc.connect(gain);
+        gain.connect(c.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.08);
+      } catch (e) {}
+    }
+
+    function playDing(stepIndex) {
+      if (!enabled) return;
+      try {
+        var c = init();
+        if (!c) return;
+        var now = c.currentTime;
+        var notes = [523.25, 659.25, 783.99, 1046.50];
+        var freq = notes[stepIndex % notes.length];
+
+        var osc = c.createOscillator();
+        var gain = c.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, now);
+
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+        osc.connect(gain);
+        gain.connect(c.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.22);
+      } catch (e) {}
+    }
+
+    function playCelebration() {
+      if (!enabled) return;
+      try {
+        var c = init();
+        if (!c) return;
+        var now = c.currentTime;
+        var chord = [
+          { f: 523.25, d: 0.00 },
+          { f: 659.25, d: 0.09 },
+          { f: 783.99, d: 0.18 },
+          { f: 1046.50, d: 0.27 }
+        ];
+
+        chord.forEach(function (n) {
+          var osc = c.createOscillator();
+          var gain = c.createGain();
+          var t = now + n.d;
+
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(n.f, t);
+
+          gain.gain.setValueAtTime(0.2, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+
+          osc.connect(gain);
+          gain.connect(c.destination);
+
+          osc.start(t);
+          osc.stop(t + 0.5);
+        });
+      } catch (e) {}
+    }
+
+    return {
+      init: init,
+      click: playClick,
+      check: playCheck,
+      button: playButton,
+      sonar: playSonar,
+      ding: playDing,
+      celebration: playCelebration,
+      toggle: function () {
+        enabled = !enabled;
+        if (enabled) playClick();
+        return enabled;
+      },
+      isEnabled: function () {
+        return enabled;
+      }
+    };
+  })();
+
+  /* ========================================================
+     ESTRUTURA DAS ETAPAS COM IMAGENS CORRESPONDENTES
+     ======================================================== */
+  var TOTAL = 16;
+  var S = [
+    // ETAPA 1 (NOVA): Tela Inicial com Botão "Começar Análise Agora"
+    {
+      intro: true,
+      img: "images/intro_justice.jpg",
+      k: "⚖️ DIREITO EM JOGO • ANÁLISE EXCLUSIVA",
+      t: "DESCUBRA EM APENAS 2 MINUTOS SE VOCÊ TEM DIREITO A RECEBER DE VOLTA O DINHEIRO PERDIDO NAS BETS!",
+      s: "Milhares de brasileiros têm direito legal de solicitar o estorno e a devolução de valores perdidos em plataformas de apostas. Faça sua avaliação rápida e confidencial.",
+      b: "COMEÇAR ANÁLISE AGORA →"
+    },
+    // ETAPA 2
+    {
+      img: "images/debt_chains.jpg",
+      k: "⚖️ ANÁLISE GRATUITA DO APOSTADOR",
+      t: "PERDEU DINHEIRO EM BET’S? ENTENDA O SEU DIREITO DE RECUPERAÇÃO DE VALORES!",
+      s: "Responda algumas perguntas e descubra se existe um caminho para ter seu dinheiro de volta.",
+      q: "Qual dessas frases descreve melhor o que você sente agora?",
+      o: ["🙏 Perdi dinheiro apostando, mas ainda acredito que dá para recuperar.", "😞 Perdi mais do que podia e não sei como sair dessa."]
+    },
+    // ETAPA 3
+    {
+      img: "images/bets_phones.jpg",
+      k: "🔒 SUA EXPERIÊNCIA É MAIS COMUM DO QUE VOCÊ IMAGINA",
+      t: "QUAL FOI O SEU PRINCIPAL PROBLEMA COM APOSTAS?",
+      s: "Sua resposta ajudará a organizar as orientações que aparecem no resultado.",
+      o: ["💸 Perdi dinheiro que não podia perder.", "🏠 Usei dinheiro de contas, poupança ou empréstimo.", "🤫 Escondi minhas perdas de quem eu amo, para não ser julgado.", "🔁 Não conseguia parar sem antes recuperar o que perdi e acabava perdendo mais.", "❓ Outro problema."]
+    },
+    // ETAPA 4
+    {
+      img: "images/freedom_relief.jpg",
+      k: "🔓 IMAGINE ESSE DIA",
+      t: "O QUE VOCÊ FARIA SE RECUPERASSE O DINHEIRO QUE PERDEU?",
+      s: "Sua resposta nos ajuda a montar o seu relatório.",
+      o: ["🧾 Pagaria as dívidas que fiz para tentar me recuperar.", "🏠 Devolveria o dinheiro que tirei de contas ou da poupança.", "🤝 Olharia para minha família sem esconder mais nada.", "🌅 Recomeçaria do zero, sem depender da sorte.", "❓ Outra coisa."]
+    },
+    // ETAPA 5
+    {
+      img: "images/bets_phones.jpg",
+      k: "💰 VALOR ENVOLVIDO",
+      t: "QUANTO VOCÊ ACHA QUE PERDEU, NO TOTAL?",
+      s: "Não precisa ser exato. Escolha a faixa mais próxima.",
+      o: ["Até R$ 1.000", "De R$ 1.001 a R$ 5.000", "De R$ 5.001 a R$ 10.000", "De R$ 10.001 a R$ 50.000", "Acima de R$ 50.000"]
+    },
+    // ETAPA 6
+    {
+      img: "images/bets_phones.jpg",
+      k: "🏢 ONDE O DINHEIRO FOI",
+      t: "EM QUANTAS CASAS DE APOSTAS VOCÊ JÁ PERDEU DINHEIRO?",
+      o: ["Apenas uma", "Duas ou três", "Quatro ou cinco", "Mais de cinco"]
+    },
+    // ETAPA 7
+    {
+      m: 1,
+      img: "images/debt_chains.jpg",
+      k: "🔎 O QUE PESA EM VOCÊ",
+      t: "O QUE MAIS TE PESA DEPOIS DESSAS PERDAS?",
+      s: "Marque tudo o que fizer sentido.",
+      o: ["Dívidas que não consigo pagar", "Mentiras que contei para esconder as perdas", "Vergonha de contar para quem eu amo", "Noites sem dormir pensando no dinheiro", "Promessas de parar que eu não cumpri", "Vontade de apostar de novo para tentar recuperar"],
+      b: "CONTINUAR"
+    },
+    // ETAPA 8
+    {
+      img: "images/intro_justice.jpg",
+      k: "📅 HÁ QUANTO TEMPO",
+      t: "HÁ QUANTO TEMPO VOCÊ CARREGA ESSE PESO?",
+      o: ["Começou nos últimos 30 dias", "Entre 1 e 6 meses", "Entre 6 meses e 1 ano", "Há mais de 1 ano", "Ainda estou nisso, todos os dias"]
+    },
+    // ETAPA 9
+    {
+      m: 1,
+      img: "images/debt_chains.jpg",
+      k: "📋 O QUE MUDOU",
+      t: "O QUE ESSAS PERDAS CAUSARAM NA SUA VIDA?",
+      o: ["Dívidas ou contas atrasadas", "Briga ou distanciamento da família", "Ansiedade e noites sem dormir", "Vergonha de contar para alguém", "Dificuldade de confiar em mim mesmo", "Medo de nunca mais recuperar o que perdi"],
+      b: "CONTINUAR"
+    },
+    // ETAPA 10
+    {
+      img: "images/bets_phones.jpg",
+      k: "🔁 O QUE VOCÊ JÁ TENTOU",
+      t: "O QUE VOCÊ FEZ ATÉ AGORA PARA TENTAR RECUPERAR O DINHEIRO?",
+      o: ["Apostei mais, achando que a sorte ia virar", "Pedi dinheiro emprestado para tentar me refazer", "Procurei dicas e métodos na internet", "Tentei parar, mas voltei a apostar", "Ainda não fiz nada"]
+    },
+    // ETAPA 11
+    {
+      img: "images/intro_justice.jpg",
+      k: "🧩 O QUE TRAVA VOCÊ",
+      t: "O QUE MAIS TE IMPEDE DE DAR O PRÓXIMO PASSO?",
+      o: ["Não sei se ainda existe um caminho para mim", "Não sei por onde começar", "Já tentei de tudo e nada funcionou", "Tenho vergonha de pedir ajuda", "Tenho medo de perder mais dinheiro"]
+    },
+    // ETAPA 12
+    {
+      m: 1,
+      img: "images/freedom_relief.jpg",
+      k: "🎯 O QUE VOCÊ ESPERA",
+      t: "O QUE VOCÊ MAIS QUER QUE ESSE MANUAL FAÇA POR VOCÊ?",
+      o: ["Me mostrar um caminho real para ter meu dinheiro de volta", "Me dar um passo a passo simples, sem enrolação", "Me tirar do buraco das dívidas", "Me devolver a paz que eu tinha antes", "Me ajudar a parar de depender da sorte", "Me fazer sentir que ainda dá tempo"],
+      b: "QUERO MEU RESULTADO"
+    },
+    // ETAPA 13 (ANÁLISE 1)
+    {
+      auto: "analise",
+      k: "⭐ PROCESSAMENTO AVANÇADO",
+      t: "ESTAMOS ANALISANDO O SEU CASO EM TEMPO REAL.",
+      msgs: ["Identificando o seu perfil de perdas...", "Cruzando suas respostas com a legislação...", "Selecionando o método mais indicado...", "Preparando o seu resultado final..."],
+      ms: 10500
+    },
+    // ETAPA 14
+    {
+      img: "images/bets_phones.jpg",
+      k: "📩 ANTES DO RESULTADO",
+      t: "QUANDO FOI A ÚLTIMA VEZ QUE VOCÊ APOSTOU?",
+      o: ["Hoje ou nos últimos dias", "No último mês", "Há alguns meses", "Já parei, mas ainda quero recuperar o que perdi"]
+    },
+    // ETAPA 15 (ANÁLISE 2)
+    {
+      auto: "relatorio",
+      k: "🗂️ PREPARANDO SEU RELATÓRIO",
+      t: "FINALIZANDO A ESTRUTURAÇÃO DO SEU DIAGNÓSTICO.",
+      msgs: ["Seu perfil foi registrado", "Valores e período organizados", "Suas dores foram identificadas", "Seu resultado foi gerado com sucesso"],
+      ms: 5800
+    },
+    // ETAPA 16 (RELATÓRIO FINAL COM BOTÃO DA VSL)
+    {
+      img: "images/freedom_relief.jpg",
+      fim: "relatorio",
+      k: "📑 SEU DIAGNÓSTICO",
+      t: "BOA NOTÍCIA: O SEU CASO TEM SAÍDA."
+    }
+  ];
+
+  // Lista de depoimentos realistas com fotos
+  var DEPOIMENTOS = [
+    {
+      nome: "Marcos Silva, 41 anos",
+      tag: "✓ Recuperação Concluída",
+      foto: "avatars/marcos.jpg",
+      fallback: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=faces",
+      texto: "Pela primeira vez eu tive um caminho claro e seguro. Consegui reaver meus valores em menos de 15 dias sem burocracia."
+    },
+    {
+      nome: "Camila Ribeiro, 32 anos",
+      tag: "✓ Recuperou R$ 14.800",
+      foto: "avatars/camila.jpg",
+      fallback: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=faces",
+      texto: "Recuperei R$ 14.800 que achei que estavam totalmente perdidos. Estava desesperada com as dívidas e isso me devolveu a paz e o sono."
+    },
+    {
+      nome: "Rafael Mendes, 36 anos",
+      tag: "✓ Recuperação Concluída",
+      foto: "avatars/rafael.jpg",
+      fallback: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&h=150&fit=crop&crop=faces",
+      texto: "Simples, direto e sem promessas milagrosas. Segui o procedimento certinho, quitei as contas atrasadas e tirei aquele peso das costas."
+    },
+    {
+      nome: "Juliana Castro, 28 anos",
+      tag: "✓ Recuperou R$ 7.600",
+      foto: "avatars/juliana.jpg",
+      fallback: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=faces",
+      texto: "Tive vergonha por meses de falar sobre isso. O atendimento e o passo a passo foram 100% discretos e o resultado veio muito mais rápido do que imaginei."
+    },
+    {
+      nome: "Anderson Souza, 48 anos",
+      tag: "✓ Recuperação Concluída",
+      foto: "avatars/anderson.jpg",
+      fallback: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=faces",
+      texto: "Eu achava que já era tarde demais e que ninguém me entenderia. Foi a melhor decisão para reconstruir a minha estabilidade financeira."
+    },
+    {
+      nome: "Patrícia Almeida, 45 anos",
+      tag: "✓ Recuperou R$ 12.300",
+      foto: "avatars/patricia.jpg",
+      fallback: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=faces",
+      texto: "Recuperei meu dinheiro e a harmonia dentro de casa com a minha família. Não tenho palavras para agradecer a clareza e seriedade desse método."
+    }
+  ];
+
+  var LETTERS = "ABCDEF";
+  var card = document.getElementById("card"),
+      stepEl = document.getElementById("step"),
+      fill = document.getElementById("fill"),
+      pb = document.getElementById("pb"),
+      back = document.getElementById("back"),
+      soundBtn = document.getElementById("sound-btn");
+  
+  var i = 0, answers = {}, timers = [];
+
+  soundBtn.onclick = function () {
+    var state = SoundEngine.toggle();
+    soundBtn.textContent = state ? "🔊 Som Ativo" : "🔇 Som Mutado";
+    soundBtn.classList.toggle("muted", !state);
+  };
+
+  function clear() {
+    timers.forEach(function (t) {
+      if (typeof t === "number") clearTimeout(t);
+      else if (t && typeof t.clear === "function") t.clear();
+      else if (t) clearInterval(t);
+    });
+    timers = [];
+  }
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function createRipple(evt, target) {
+    var rect = target.getBoundingClientRect();
+    var circle = document.createElement("span");
+    var diameter = Math.max(rect.width, rect.height);
+    var radius = diameter / 2;
+
+    circle.style.width = circle.style.height = diameter + "px";
+    var clientX = evt.clientX || (evt.touches && evt.touches[0] ? evt.touches[0].clientX : rect.left + radius);
+    var clientY = evt.clientY || (evt.touches && evt.touches[0] ? evt.touches[0].clientY : rect.top + radius);
+    circle.style.left = (clientX - rect.left - radius) + "px";
+    circle.style.top = (clientY - rect.top - radius) + "px";
+    circle.className = "ripple-wave";
+
+    var old = target.querySelector(".ripple-wave");
+    if (old) old.remove();
+
+    target.appendChild(circle);
+    setTimeout(function () {
+      circle.remove();
+    }, 600);
+  }
+
+  function head(s) {
+    card.appendChild(el("p", "kicker", s.k));
+    card.appendChild(el("h1", "", s.t));
+    if (s.s) card.appendChild(el("p", "sub", s.s));
+  }
+
+  function go(n) {
+    clear();
+    i = n;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function updateProgressBar(n) {
+    var pct = (n / TOTAL) * 100;
+    fill.style.width = pct + "%";
+    pb.setAttribute("aria-valuenow", n);
+
+    var ratio = Math.max(0, Math.min(1, (n - 1) / (TOTAL - 1)));
+    var hue = Math.round(4 + ratio * 136);
+    var color = "hsl(" + hue + ", 85%, 44%)";
+    fill.style.backgroundColor = color;
+    fill.style.boxShadow = "0 0 12px hsla(" + hue + ", 85%, 45%, 0.45)";
+  }
+
+  function render() {
+    var s = S[i], n = i + 1;
+    card.textContent = "";
+    
+    card.style.animation = "none";
+    void card.offsetWidth;
+    card.style.animation = "cardEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) both";
+
+    stepEl.textContent = "Etapa " + n + " de " + TOTAL;
+    updateProgressBar(n);
+
+    // Visibilidade do botão voltar
+    back.hidden = (i === 0 || (s && s.auto) || (s && s.fim) || (i > 0 && S[i - 1] && S[i - 1].auto));
+
+    if (i >= S.length) return;
+
+    // Renderiza a Imagem correspondente em cima da pergunta
+    if (s.img) {
+      var wrap = el("div", "card-img-wrap");
+      var img = document.createElement("img");
+      img.className = "card-img";
+      img.src = s.img;
+      img.alt = s.t || "Imagem ilustrativa";
+      img.loading = "eager";
+      wrap.appendChild(img);
+      card.appendChild(wrap);
+    }
+
+    head(s);
+
+    // Tratamento da Etapa 1 (Introdução com botão "Começar Análise Agora")
+    if (s.intro) {
+      var featBox = el("div", "intro-features");
+      [
+        { icon: "⏱️", b: "Tempo estimado: ", t: "Menos de 2 minutos para concluir." },
+        { icon: "⚖️", b: "Direito em Jogo: ", t: "Avaliação conforme a legislação e direitos do consumidor." },
+        { icon: "🔒", b: "Sigilo Absoluto: ", t: "Suas respostas são 100% confidenciais e seguras." }
+      ].forEach(function (f) {
+        var row = el("div", "intro-feat");
+        row.innerHTML = "<span>" + f.icon + "</span> <div><b>" + f.b + "</b>" + f.t + "</div>";
+        featBox.appendChild(row);
+      });
+      card.appendChild(featBox);
+
+      var startBtn = el("button", "btn btn-intro", s.b || "COMEÇAR ANÁLISE AGORA →");
+      startBtn.type = "button";
+      startBtn.onclick = function (evt) {
+        SoundEngine.button();
+        createRipple(evt, startBtn);
+        timers.push(setTimeout(function () { go(i + 1); }, 200));
+      };
+      card.appendChild(startBtn);
+      return;
+    }
+
+    if (s.auto) return runAuto(s);
+    if (s.fim) return report();
+
+    if (s.q) card.appendChild(el("p", "q", s.q));
+
+    var ul = el("ul", "opts"), sel = answers[i] || (s.m ? [] : null), btn;
+    s.o.forEach(function (txt, k) {
+      var li = document.createElement("li"), b = el("button", "opt" + (s.m ? " multi" : ""));
+      b.type = "button";
+      b.style.animationDelay = (k * 45) + "ms";
+
+      b.appendChild(el("span", "tag", s.m ? "" : LETTERS[k]));
+      b.appendChild(el("span", "txt", txt));
+      var on = s.m ? sel.indexOf(k) > -1 : sel === k;
+      if (s.m) {
+        b.setAttribute("role", "checkbox");
+        b.setAttribute("aria-checked", on);
+        if (on) b.firstChild.textContent = "✓";
+      } else {
+        b.setAttribute("aria-pressed", on);
+      }
+
+      b.onclick = function (evt) {
+        createRipple(evt, b);
+
+        if (!s.m) {
+          SoundEngine.click();
+          answers[i] = k;
+          Array.prototype.forEach.call(ul.querySelectorAll(".opt"), function (x) {
+            x.setAttribute("aria-pressed", "false");
+          });
+          b.setAttribute("aria-pressed", "true");
+          timers.push(setTimeout(function () { go(i + 1); }, 320));
+          return;
+        }
+
+        SoundEngine.check();
+        var a = answers[i] || (answers[i] = []), p = a.indexOf(k);
+        if (p > -1) a.splice(p, 1); else a.push(k);
+        var now = a.indexOf(k) > -1;
+        b.setAttribute("aria-checked", now);
+        b.firstChild.textContent = now ? "✓" : "";
+        btn.disabled = a.length === 0;
+      };
+
+      li.appendChild(b);
+      ul.appendChild(li);
+    });
+    card.appendChild(ul);
+
+    if (s.m) {
+      btn = el("button", "btn", s.b);
+      btn.type = "button";
+      btn.disabled = !(sel && sel.length);
+      btn.onclick = function (evt) {
+        SoundEngine.button();
+        createRipple(evt, btn);
+        timers.push(setTimeout(function () { go(i + 1); }, 220));
+      };
+      card.appendChild(btn);
+      if (i === 6) card.appendChild(el("p", "hint", "Marque pelo menos uma opção para continuar."));
+    }
+  }
+
+  function runAuto(s) {
+    var box = el("div", "analysis");
+
+    if (s.auto === "analise") {
+      var header = el("div", "analysis-header");
+      var radar = el("div", "radar-box");
+      radar.innerHTML = '<span class="radar-pulse"><span class="radar-ping"></span><span class="radar-core"></span></span> Análise em Andamento';
+      
+      var pctEl = el("div", "analysis-counter", "0%");
+      header.appendChild(radar);
+      header.appendChild(pctEl);
+      box.appendChild(header);
+
+      var tr = el("div", "track"), bar = document.createElement("i");
+      tr.appendChild(bar);
+      box.appendChild(tr);
+
+      var msg = el("p", "msg", s.msgs[0]);
+      box.appendChild(msg);
+      card.appendChild(box);
+
+      card.appendChild(el("p", "rev-title", "Histórias de quem já recuperou"));
+      var revs = el("div", "revs");
+      
+      DEPOIMENTOS.forEach(function (r, idx) {
+        var c = el("figure", "rev");
+        c.style.animationDelay = (250 + idx * 90) + "ms";
+
+        var headDiv = el("div", "rev-header");
+        var img = document.createElement("img");
+        img.className = "rev-avatar";
+        img.alt = r.nome;
+        img.src = r.foto;
+        img.loading = "lazy";
+        img.onerror = function () {
+          if (this.src !== r.fallback) this.src = r.fallback;
+        };
+        headDiv.appendChild(img);
+
+        var infoDiv = el("div", "rev-info");
+        var nameRow = el("div", "rev-name-row");
+        nameRow.appendChild(el("span", "rev-name", r.nome));
+        nameRow.appendChild(el("span", "rev-badge", r.tag));
+        infoDiv.appendChild(nameRow);
+        infoDiv.appendChild(el("div", "rev-stars", "★★★★★"));
+        headDiv.appendChild(infoDiv);
+
+        c.appendChild(headDiv);
+        c.appendChild(el("blockquote", "rev-quote", "“" + r.texto + "”"));
+        revs.appendChild(c);
+      });
+      card.appendChild(revs);
+
+      bar.style.transition = "width " + s.ms + "ms cubic-bezier(0.1, 0.7, 0.1, 1)";
+      timers.push(setTimeout(function () { bar.style.width = "100%"; }, 50));
+
+      var startTime = Date.now();
+      var duration = s.ms;
+      var lastSonar = 0;
+
+      var counterTimer = setInterval(function () {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(100, Math.round((elapsed / duration) * 100));
+        pctEl.textContent = p + "%";
+
+        if (elapsed - lastSonar >= 900 && p < 100) {
+          lastSonar = elapsed;
+          SoundEngine.sonar();
+        }
+
+        if (p >= 100) clearInterval(counterTimer);
+      }, 35);
+      timers.push({ clear: function () { clearInterval(counterTimer); } });
+
+      s.msgs.forEach(function (m, k) {
+        timers.push(setTimeout(function () {
+          msg.classList.add("msg-fade");
+          setTimeout(function () {
+            msg.textContent = m;
+            msg.classList.remove("msg-fade");
+            SoundEngine.sonar();
+          }, 140);
+        }, k * (s.ms / s.msgs.length)));
+      });
+
+    } else {
+      var header = el("div", "analysis-header");
+      var radar = el("div", "radar-box");
+      radar.innerHTML = '<span class="radar-pulse"><span class="radar-ping"></span><span class="radar-core"></span></span> Consolidando Diagnóstico';
+      header.appendChild(radar);
+      box.appendChild(header);
+
+      var ul = el("ul", "checks");
+      s.msgs.forEach(function (m, k) {
+        var li = document.createElement("li");
+        li.appendChild(el("span", "dot", "✓"));
+        li.appendChild(el("span", "", m));
+        ul.appendChild(li);
+        timers.push(setTimeout(function () {
+          li.classList.add("on");
+          SoundEngine.ding(k);
+        }, 200 + k * ((s.ms - 400) / s.msgs.length)));
+      });
+      box.appendChild(ul);
+      card.appendChild(box);
+    }
+
+    timers.push(setTimeout(function () { go(i + 1); }, s.ms + 300));
+  }
+
+  function report() {
+    SoundEngine.celebration();
+
+    var r = el("div", "report");
+
+    var badge = el("div", "analysis-complete-badge", "✓ DIAGNÓSTICO LIBERADO");
+    card.appendChild(badge);
+
+    function row(label, text, cls) {
+      var p = el("p", cls || "");
+      p.appendChild(el("b", "", label));
+      p.appendChild(document.createTextNode(text));
+      r.appendChild(p);
+    }
+    row("1. Situação informada", "perdas acumuladas, pendências financeiras e o direito legal de pleitear a restituição dos valores.");
+    row("2. Ponto de atenção", "o seu perfil mostra que o tempo é um fator determinante. Quanto antes o processo é iniciado, maiores são as chances de reaver os valores antes que as plataformas encerrem suas operações ou alterem suas razões sociais.", "warn");
+    row("3. Próximo passo", "assistir à apresentação oficial que detalha exatamente o que deve ser feito no seu caso específico.");
+    card.appendChild(r);
+
+    card.appendChild(el("blockquote", "", "“Você relatou perdas e a intenção clara de recuperar o que é seu. Casos exatamente como o seu já obtiveram êxito através dos mecanismos legais de estorno e restituição. Assista ao vídeo explicativo para liberar seu procedimento.”"));
+
+    var vslBtn = document.createElement("a");
+    vslBtn.className = "btn btn-vsl";
+    vslBtn.href = VSL_URL;
+    vslBtn.innerHTML = "ASSISTIR AO VÍDEO EXPLICATIVO &rarr;";
+    vslBtn.onclick = function (evt) {
+      SoundEngine.button();
+      createRipple(evt, vslBtn);
+    };
+    card.appendChild(vslBtn);
+  }
+
+  back.onclick = function (evt) {
+    SoundEngine.button();
+    createRipple(evt, back);
+    var p = i - 1;
+    while (p > 0 && S[p].auto) p--;
+    timers.push(setTimeout(function () {
+      go(Math.max(0, p));
+    }, 120));
+  };
+
+  render();
+})();
+</script>
+
+</body>
+</html>
